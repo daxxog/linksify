@@ -30,38 +30,36 @@
         this.$ = $;
 
         var that = this,
-            css = 'a {color: #FFFFFF; text-decoration: none; padding: 3px; font-size: 150%} #lsfy-selected {color: #000000; background-color: #FFFFFF; text-decoration: none}';
+            css = 'body {color: #FFFFFF; background-color: #000000; font-size: 150%} .text,.password {color: #FFFFFF; background-color: #000000; font-size: 100%; margin-top: 10px; margin-bottom: 10px} a {color: #FFFFFF; text-decoration: none; padding: 3px; font-size: 100%} #lsfy-selected {color: #000000; background-color: #FFFFFF; text-decoration: none}';
 
         $('<style type="text/css">'+css+'</style>').appendTo('head');
-        $('body').css('background-color', '#000000');
 
-        this.a = $('a');
+        this.a = $('a,.text,.password');
         this.i = 0;
 
-        this.curr().attr('id', 'lsfy-selected');
+        this.postmove();
 
         $(document).keydown(function(e){
             var sel;
 
-            if(e.keyCode === 13) { //enter
-                window.location = that.curr().attr('href');
-            }
+            switch(e.keyCode) {
+                case 13: //enter
+                    if(that.curr().is('a')) {
+                        that.redir(that.curr().attr('href'));
+                    }
+                  return false;
 
-            if(e.keyCode === 38) { //down
-                that.curr().attr('id', '');
-                that.prev();
-                that.curr().attr('id', 'lsfy-selected');
+                case 38: //up
+                    that.prev();
+                  return false;
 
-                return false;
-            }
+                case 40: //down
+                    that.next();
+                  return false;
 
-            if(e.keyCode === 40) { //down
-                that.curr().attr('id', '');
-                that.next();
-                that.curr().attr('id', 'lsfy-selected');
-
-                return false;
-            }
+                default: //other keys
+                  break;
+            };
         });
     };
 
@@ -71,12 +69,36 @@
         return this.$(this.a[this.i]);
     };
 
-    Linksify.fn.next = function() {
-        this.i = (this.i + 1) % this.a.length;
+    Linksify.fn.premove = function() {
+        if(this.curr().is('a')) {
+            this.curr().attr('id', '');
+        } else {
+            this.curr().blur();
+        }
+    };
+
+    Linksify.fn.postmove = function() {
+        if(this.curr().is('a')) {
+            this.curr().attr('id', 'lsfy-selected');
+        } else {
+            this.curr().focus();
+        }
     };
 
     Linksify.fn.prev = function() {
+        this.premove();
         this.i = (this.i === 0) ? (this.a.length  - 1) : (this.i - 1);
+        this.postmove();
+    };
+
+    Linksify.fn.next = function() {
+        this.premove();
+        this.i = (this.i + 1) % this.a.length;
+        this.postmove();
+    };
+
+    Linksify.fn.redir = function(l) {
+        window.location = l;
     };
 
     return Linksify;
