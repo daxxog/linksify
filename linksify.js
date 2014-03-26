@@ -30,11 +30,11 @@
         this.$ = $;
 
         var that = this,
-            css = 'body {color: #FFFFFF; background-color: #000000; font-size: 150%} .text,.password {color: #FFFFFF; background-color: #000000; font-size: 100%; margin-top: 10px; margin-bottom: 10px} a {color: #FFFFFF; text-decoration: none; padding: 3px; font-size: 100%} #lsfy-selected {color: #000000; background-color: #FFFFFF; text-decoration: none}';
+            css = 'body {color: #FFFFFF; background-color: #000000; font-size: 150%} .text,.password,.submit {color: #FFFFFF; background-color: #000000; font-size: 100%; margin-top: 10px; margin-bottom: 10px} a {color: #FFFFFF; text-decoration: none; padding: 3px; font-size: 100%} .lsfy-selected,#lsfy-selected {color: #000000; background-color: #FFFFFF; text-decoration: none}';
 
         $('<style type="text/css">'+css+'</style>').appendTo('head');
 
-        this.a = $('a,.text,.password');
+        this.a = $('a,.text,.password,.submit');
         this.i = 0;
 
         this.postmove();
@@ -46,6 +46,10 @@
                 case 13: //enter
                     if(that.curr().is('a')) {
                         that.redir(that.curr().attr('href'));
+                    } else if(that.curr().is('.submit')) {
+                        that.curr().click();
+                    } else {
+                        $('form').submit();
                     }
                   return false;
 
@@ -72,6 +76,8 @@
     Linksify.fn.premove = function() {
         if(this.curr().is('a')) {
             this.curr().attr('id', '');
+        } else if(this.curr().is('.submit')) {
+            this.curr().removeClass('lsfy-selected');
         } else {
             this.curr().blur();
         }
@@ -80,6 +86,8 @@
     Linksify.fn.postmove = function() {
         if(this.curr().is('a')) {
             this.curr().attr('id', 'lsfy-selected');
+        } else if(this.curr().is('.submit')) {
+            this.curr().addClass('lsfy-selected');
         } else {
             this.curr().focus();
         }
