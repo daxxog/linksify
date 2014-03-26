@@ -1,0 +1,30 @@
+{
+    "name"        : "linksify",
+    "description" : "Emulate the webpage look and feel of Links in text mode.",
+    "homepage"    : "https://github.com/daxxog/linksify",
+    "main"        : "linksify.min.js",
+    "version"     : "0.0.1",
+    "engines": { "node" : ">=0.7.0" },
+    "maintainers": [{
+        "name"  : "David Volm",
+        "email" : "david@volminator.com",
+        "web"   : "http://daxxog.com/"
+    }],
+    "repository": {
+        "type" : "git",
+        "url"  : "https://github.com/daxxog/linksify.git"
+    },
+    "devDependencies": {
+        "bitfactory": "*",
+        "stoptime": "*",
+        "uglify-js": "*"
+    },
+    "scripts": {
+        "preinstall": "./preinstall.sh",
+        "prepublish": "./prepublish.sh",
+        "postpublish": "./postpublish.sh"
+    },
+    "bin": {
+        "linksify" : "./bin/linksify"
+    }
+}
